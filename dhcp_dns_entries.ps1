@@ -27,7 +27,7 @@ ForEach ($vlan in $vlans)
         $octet3 = $octets[3]
         $ptr_zone = "$octet2.$octet1.$octet0.in-addr.arpa"
 
-        Write-Host "Checking DNS for A record: $fqdn"     
+        Write-Debug "Checking DNS for A record: $fqdn"     
         Try
         {
             $record = Get-DnsServerResourceRecord -Name $hostname -ZoneName $zone_name -RRType A -ErrorAction Stop
@@ -55,7 +55,7 @@ ForEach ($vlan in $vlans)
             }
         }
         
-        Write-Host "Checking DNS for PTR record: $ip"     
+        Write-Debug "Checking DNS for PTR record: $ip"     
         Try
         {
             $record = Get-DnsServerResourceRecord -Name $octet3 -ZoneName $ptr_zone -RRType ptr -ErrorAction Stop
@@ -92,10 +92,11 @@ ForEach ($vlan in $vlans)
         $octet2 = $vlan
         $ip = "$octet0.$octet1.$octet2.$octet3"
         $hostnb = "{0:000}" -f $octet3
-        $hostname = "dhcp-$hostnb.v$i"
+        $hostname = "dhcp-$hostnb.v$vlan"
         $fqdn = "$hostname.$zone_name"
+        $ptr_zone = "$octet2.$octet1.$octet0.in-addr.arpa"
 
-        Write-Host "Checking DNS for A record: $fqdn"     
+        Write-Debug "Checking DNS for A record: $fqdn"     
         Try
         {
             $record = Get-DnsServerResourceRecord -Name $hostname -ZoneName $zone_name -RRType A -ErrorAction Stop
@@ -123,7 +124,7 @@ ForEach ($vlan in $vlans)
             }
         }
 
-        Write-Host "Checking DNS for PTR record: $ip"     
+        Write-Debug "Checking DNS for PTR record: $ip"     
         Try
         {
             $record = Get-DnsServerResourceRecord -Name $octet3 -ZoneName $ptr_zone -RRType ptr -ErrorAction Stop
@@ -151,4 +152,4 @@ ForEach ($vlan in $vlans)
             }
         }
     }
-} 
+}
